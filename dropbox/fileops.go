@@ -2,12 +2,13 @@ package dropbox
 
 import (
 	"encoding/json"
+	"net/url"
 )
 
-func Copy(s Session, root string, to_path string, p *Parameters) (c Contents, err error) {
+func Copy(s Session, uri Uri, p *Parameters) (c Contents, err error) {
 	params := map[string]string{
-		"root":    root,
-		"to_path": to_path,
+		"root":    uri.Root,
+		"to_path": url.QueryEscape(uri.Path),
 	}
 
 	if p != nil {
@@ -46,7 +47,7 @@ func Copy(s Session, root string, to_path string, p *Parameters) (c Contents, er
 func CreateFolder(s Session, uri Uri, p *Parameters) (m Metadata, err error) {
 	params := map[string]string{
 		"root": uri.Root,
-		"path": uri.Path,
+		"path": url.QueryEscape(uri.Path),
 	}
 
 	if p != nil && p.Locale != "" {
@@ -75,7 +76,7 @@ func CreateFolder(s Session, uri Uri, p *Parameters) (m Metadata, err error) {
 func Delete(s Session, uri Uri, p *Parameters) (m Metadata, err error) {
 	params := map[string]string{
 		"root": uri.Root,
-		"path": uri.Path,
+		"path": url.QueryEscape(uri.Path),
 	}
 
 	if p != nil && p.Locale != "" {
@@ -101,11 +102,11 @@ func Delete(s Session, uri Uri, p *Parameters) (m Metadata, err error) {
 	return
 }
 
-func Move(s Session, uri Uri, root string, from_path string, to_path string, p *Parameters) (m Metadata, err error) {
+func Move(s Session, uri Uri, to_path string, p *Parameters) (m Metadata, err error) {
 	params := map[string]string{
-		"root":      root,
-		"from_path": from_path,
-		"to_path":   to_path,
+		"root":      uri.Root,
+		"from_path": url.QueryEscape(uri.Path),
+		"to_path":   url.QueryEscape(to_path),
 	}
 
 	if p != nil && p.Locale != "" {
